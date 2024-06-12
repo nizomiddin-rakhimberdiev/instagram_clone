@@ -1,9 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from posts.models import Post
 
 # Create your views here.
 def posts_list(request):
-    posts = Post.objects.all()
-    context = {'posts': posts}
-    return render(request, 'post_list.html', context)
+    if request.user.is_authenticated:
+        posts = Post.objects.all()
+        context = {'posts': posts}
+        return render(request, 'post_list.html', context)
+    else:
+        return redirect('users:login')
