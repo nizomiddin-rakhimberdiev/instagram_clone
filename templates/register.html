@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<form method="post" enctype="multipart/form-data">
+<div class="row d-flex justify-content-center">
+<form class="border p-4 " method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group">
         <label for="username">Username</label>
@@ -22,5 +22,8 @@
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
+
+
+</div>
 
 {% endblock %}

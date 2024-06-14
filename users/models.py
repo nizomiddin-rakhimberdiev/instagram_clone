@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -7,8 +8,10 @@ from django.db import models
 class CustomUser(AbstractUser):
     bio = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=13)
-    profile_picture = models.ImageField(upload_to='media/profile_pictures/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='media/profile_pictures/', null=True, blank=True, default='media/profile_pictures/avatar.png')
 
+    def set_password(self, raw_password):
+        super().set_password(raw_password)
     def __str__(self):
         return self.username
 

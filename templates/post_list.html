@@ -3,40 +3,38 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-8 offset-md-2">
-        {% for post in posts %}
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title">{{ post.author.username }} kimdir</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">{{ post.content }} nimadir</p>
-                {% if post.image %}
-                <img src="{{ post.image.url }}" class="img-fluid" alt="Post Image">
-                {% endif %}
-                {% if post.video %}
-                <video class="img-fluid" controls>
-                    <source src="{{ post.video.url }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                {% endif %}
-            </div>
-            <div class="card-footer">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <textarea name="comment" class="form-control" rows="2" placeholder="Add a comment..."></textarea>
+    <div class="row">
+        <div class="col-md-6 offset-md-2">
+            {% for post in posts %}
+                <div class="card mb-4">
+                    <div class="card-header d-flex">
+                        <img src="{{ post.author.profile_picture.url }}"
+                             style="width: 40px; height: 40px; border-radius: 50%" alt="rasm yo'q">
+                        <h5 class="card-title m-1 mt-1">{{ post.author.username }}</h5>
                     </div>
-                    <button type="submit" class="btn btn-secondary">Comment</button>
-                </form>
-                <div class="mt-3">
-                    {% for comment in post.comments.all %}
-                    <p><strong>{{ comment.author.username }}</strong>: {{ comment.content }}</p>
-                    {% endfor %}
+                    <div class="card-img">
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" class="img-fluid" alt="Post Image">
+                        {% endif %}
+                        {% if post.video %}
+                            <video class="img-fluid" controls>
+                                <source src="{{ post.video.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">{{ post.content }}</p>
+                        <a href="{% url 'posts:add_comment' post.id %}" type="submit" class="btn btn-secondary">Comment</a>
+
+{#                        <div class="mt-3">#}
+{#                            {% for comment in post.comments.all %}#}
+{#                                <p><strong>{{ comment.author.username }}</strong>: {{ comment.content }}</p>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 {% endblock %}
