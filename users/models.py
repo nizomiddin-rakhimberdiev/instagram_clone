@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
 
     def set_password(self, raw_password):
         super().set_password(raw_password)
+
     def __str__(self):
         return self.username
 

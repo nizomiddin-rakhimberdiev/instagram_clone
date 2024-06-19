@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h2 class="text-center mb-3">Instagram SignUp</h2>
 <div class="row d-flex justify-content-center">
 <form class="border p-4 " method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -21,6 +22,7 @@
         <input type="password" name="password2" id="password2" class="form-control" required>
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
+    <a href="{% url 'users:login' %}">Login page here</a>
 </form>
 
 

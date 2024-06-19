@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-
+import random
 from posts.forms import PostForm
 from posts.models import Post, Comment
 
@@ -40,3 +40,17 @@ def add_comment(request, post_id):
     else:
         comments = Comment.objects.all().filter(post=post)
     return render(request, 'add_comment.html', {'post': post, 'comments': comments})
+
+
+def my_posts(request):
+    user = request.user
+    posts = Post.objects.all().filter(author=request.user)
+    context = {'posts': posts, 'user': user}
+    return render(request, 'profile.html', context)
+
+
+def explore_posts(request):
+    posts = list(Post.objects.all())
+    random.shuffle(posts)
+    context = {'posts': posts}
+    return render(request, 'explore.html', context)

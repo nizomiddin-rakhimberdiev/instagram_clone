@@ -17,7 +17,8 @@
         <a href="{% url 'posts:post_list' %}">Home</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
-                <li class="navbar-brand"><a href="">My posts</a></li>
+                <li class="navbar-brand"><a href="{% url 'posts:explore' %}">Explore</a></li>
+                <li class="navbar-brand"><a href="{% url 'posts:my-posts' %}">My posts</a></li>
                 {% if request.user.is_authenticated %}
                     <li class="list-item"><a class="btn btn-warning" href="{% url 'users:logout' %}">Logout</a></li>
                 {% endif    %}
