@@ -8,4 +8,6 @@ urlpatterns = [
     path('<int:post_id>/comments/', add_comment, name='add_comment'),
     path('my_posts/', my_posts, name='my-posts'),
     path('explore/', explore_posts, name='explore'),
+    path('add_post/', create_post, name='add-post'),
+    path('reels/', reels_list, name='reels'),
 ]

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Direct Messages</h4>
+            <ul class="list-group">
+                {% for user in users %}
+                <a href="{% url 'users:inbox' user.username %}" class="list-group-item list-group-item-action {% if active_user and active_user.username == user.username %}active{% endif %}">
+                    {{ user.username }}
+                </a>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-8">
+            {% if active_user %}
+            <h4>Chat with {{ active_user.username }}</h4>
+            <div class="border p-3 mb-3" style="height: 400px; overflow-y: scroll;">
+                {% for message in messages %}
+                <div class="mb-2">
+                    <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+                </div>
+                {% endfor %}
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="content" class="form-control" rows="3" placeholder="Type your message here..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+            {% else %}
+            <h4>Select a user to start a chat</h4>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

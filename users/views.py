@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 
-from users.models import CustomUser
+from users.forms import MessageForm, EditProfileForm
+from users.models import CustomUser, Message
+
 
 # Create your views here.
 def login_view(request):
@@ -33,3 +36,52 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return redirect('posts:post_list')
+
+
+
+
+
+@login_required
+def inbox(request, username=None):
+    users = CustomUser.objects.exclude(id=request.user.id)
+    messages = None
+    active_user = None
+    form = None
+
+    if username:
+        active_user = get_object_or_404(CustomUser, username=username)
+        messages = Message.objects.filter(
+            sender=request.user, receiver=active_user
+        ) | Message.objects.filter(
+            sender=active_user, receiver=request.user
+        )
+        messages = messages.order_by('timestamp')
+        form = MessageForm()
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.receiver = active_user
+            message.save()
+            return redirect('users:inbox', username=active_user.username)
+
+    context = {
+        'users': users,
+        'messages': messages,
+        'active_user': active_user,
+        'form': form,
+    }
+    return render(request, 'inbox.html', context)
+
+
+def edit_profile(request, username):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('posts:my-posts')
+    else:
+        form = EditProfileForm(instance=request.user)
+    return render(request, 'edit_profile.html', {'form': form})

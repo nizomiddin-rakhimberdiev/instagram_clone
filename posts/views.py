@@ -23,7 +23,7 @@ def create_post(request):
                 post = form.save(commit=False)
                 post.author = request.user
                 post.save()
-                return redirect('posts:posts_list')
+                return redirect('posts:post_list')
 
         else:
             form = PostForm()
@@ -54,3 +54,14 @@ def explore_posts(request):
     random.shuffle(posts)
     context = {'posts': posts}
     return render(request, 'explore.html', context)
+
+
+def reels_list(request):
+    posts = list(Post.objects.all())
+    random.shuffle(posts)
+    context = {'posts': posts}
+    return render(request, 'reels.html', context)
+
+
+
+
