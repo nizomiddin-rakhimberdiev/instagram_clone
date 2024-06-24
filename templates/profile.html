@@ -24,7 +24,7 @@
                                     <h3>{{ user.username }}</h3>
                                     <a href=""
                                        class="btn btn-outline-secondary">Follow</a>
-                                    <a href="" class="btn btn-outline-secondary">Message</a>
+                                    <a href="{% url 'users:send_message' user.username %}" class="btn btn-outline-secondary">Message</a>
 {#                                    <a href="" class="btn btn-outline-secondary">View archive</a>#}
                                 </div>
                             {% endif %}

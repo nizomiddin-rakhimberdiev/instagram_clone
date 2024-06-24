@@ -16,7 +16,7 @@ def login_view(request):
             login(request, user)
             return redirect('posts:post_list')
     return render(request, 'login.html')
-    
+
     return render(request, 'login.html')
 
 
@@ -29,7 +29,7 @@ def register_view(request):
         user.set_password(password)  # Yangi parolni hashlash va saqlash
         user.save()
         return redirect('posts:post_list')
-    
+
     return render(request, 'register.html')
 
 
@@ -38,7 +38,20 @@ def logout_view(request):
     return redirect('posts:post_list')
 
 
+def send_message_view(request, username):
+    receiver = get_object_or_404(CustomUser, username=username)
+    if request.method == 'POST':
+        message = request.POST.get('content')
+        sender = request.user
+        Message.objects.create(content=message, sender=sender, receiver=receiver)
 
+    sender_messages = Message.objects.all().filter(sender=request.user)
+    receiver_messages = Message.objects.all().filter(receiver=request.user)
+
+    combined_messages = sender_messages | receiver_messages
+    combined_messages = combined_messages.order_by('timestamp')
+
+    return render(request, 'messages.html', {'combined_messages': combined_messages})
 
 
 @login_required

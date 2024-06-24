@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('inbox/', inbox, name='inbox'),
     path('<str:username>/', inbox, name='inbox'),
+    path('direct/<str:username>/', send_message_view, name='send_message'),
 
     path('edit/<str:username>/', edit_profile, name='edit-profile'),
 ]
