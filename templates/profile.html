@@ -2,40 +2,55 @@
 
 {% block content %}
 
-    <div class="col-md-12">
+    <div class="col-md-12 ">
         <div class="row">
-            <div class="col-md-8 d-flex">
+            <div class="col-md-8 d-flex m-auto">
                 <div class="row">
                     <div class="col-md-3">
                         <img style="border-radius: 50%" class="img-fluid" src="{{ user.profile_picture.url }}" alt="">
                     </div>
                     <div class="col-md-9">
                         <div class="row">
-                            <div style="height: 35px" class="col-md-12 d-flex justify-content-between">
-                                <h3>{{ user.username }}</h3>
-                                <a href="{% url 'users:edit-profile' user.username %}"
-                                   class="btn btn-outline-secondary">Edit profile</a>
-                                <a href="{% url 'posts:add-post' %}" class="btn btn-outline-secondary">Add post</a>
-                                <a href="" class="btn btn-outline-secondary">View archive</a>
-
-                            </div>
+                            {% if user == request.user %}
+                                <div style="height: 35px" class="col-md-12 d-flex justify-content-between">
+                                    <h3>{{ user.username }}</h3>
+                                    <a href="{% url 'users:edit-profile' user.username %}"
+                                       class="btn btn-outline-secondary">Edit profile</a>
+                                    <a href="{% url 'posts:add-post' %}" class="btn btn-outline-secondary">Add post</a>
+                                    <a href="" class="btn btn-outline-secondary">View archive</a>
+                                </div>
+                            {% else %}
+                                <div style="height: 35px" class="col-md-12 d-flex justify-content-between">
+                                    <h3>{{ user.username }}</h3>
+                                    <a href=""
+                                       class="btn btn-outline-secondary">Follow</a>
+                                    <a href="" class="btn btn-outline-secondary">Message</a>
+{#                                    <a href="" class="btn btn-outline-secondary">View archive</a>#}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="row">
                             <div class="col-md-12 pt-3">
+                                <h5>{{ len_posts }} posts</h5>
+                                {% if user.bio %}
                                 <p>{{ user.bio }}</p>
+                                {% endif %}
                                 <p class="h4">{{ user.first_name }} {{ user.last_name }}</p>
+                                {% if user == request.user %}
                                 <a href="https://t.me/nizomiddin_rakhimberdiev">Telegram profile</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <hr class="mt-5">
         <div class="row py-5">
-            <div class="col-md-9">
+            <div class="col-md-9 m-auto">
                 <div class="row">
                     {% for post in posts %}
-                        <div class="col-md-4">
+                        <div class="col-md-4 mb-3 shadow">
                             <a href="{% url 'posts:add_comment' post.id %}">
                                 {% if post.image %}
                                     <img width="100%" height="250" src="{{ post.image.url }}" alt="">

@@ -19,7 +19,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="navbar-brand"><a href="{% url 'posts:reels' %}">Reels</a></li>
                 <li class="navbar-brand"><a href="{% url 'posts:explore' %}">Explore</a></li>
-                <li class="navbar-brand"><a href="{% url 'posts:my-posts' %}">{{ request.user.username }}</a></li>
+                <li class="navbar-brand"><a href="{% url 'posts:profile_page' request.user.username %}">{{ request.user.username }}</a></li>
                 {% if request.user.is_authenticated %}
                     <li class="list-item"><a class="btn btn-warning" href="{% url 'users:logout' %}">Logout</a></li>
                 {% endif    %}

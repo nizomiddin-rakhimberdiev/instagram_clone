@@ -3,12 +3,13 @@ from django.shortcuts import render, redirect
 import random
 from posts.forms import PostForm
 from posts.models import Post, Comment
+from users.models import CustomUser
 
 
 # Create your views here.
 def posts_list(request):
     if request.user.is_authenticated:
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('-created_at')
         context = {'posts': posts}
         return render(request, 'post_list.html', context)
     else:
@@ -42,10 +43,11 @@ def add_comment(request, post_id):
     return render(request, 'add_comment.html', {'post': post, 'comments': comments})
 
 
-def my_posts(request):
-    user = request.user
-    posts = Post.objects.all().filter(author=request.user)
-    context = {'posts': posts, 'user': user}
+def profile_page(request, username):
+    user = CustomUser.objects.get(username=username)
+    posts = Post.objects.all().filter(author=user)
+    len_posts = len(posts)
+    context = {'posts': posts, 'user': user, 'len_posts': len_posts}
     return render(request, 'profile.html', context)
 
 
@@ -61,7 +63,3 @@ def reels_list(request):
     random.shuffle(posts)
     context = {'posts': posts}
     return render(request, 'reels.html', context)
-
-
-
-

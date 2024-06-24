@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="col-md-12">
-        <div class="row">
+    <div class="col-md-9 m-auto">
+        <div class="row gap-3">
 
-                {% for post in posts %}
-                    <div class="col-md-4 my-2">
-                        <a href="{% url 'posts:add_comment' post.id %}">
-                            <img class="img-fluid" src="{{ post.image.url }}" alt="">
-                        </a>
-                    </div>
-                {% endfor %}
+            {% for post in posts %}
+                <div class="col-md-4 my-2 shadow gap-3">
+                    <a href="{% url 'posts:add_comment' post.id %}">
+                        {% if post.image %}
+                            <img width="100%" height="250"  src="{{ post.image.url }}" alt="">
+                        {% endif %}
+                        {% if post.video %}
+                            <video width="100%" height="250" controls>
+                                <source src="{{ post.video.url }}" type="video/mp4">
+                                {#                                <source src="{{ post.video.url }}" type="video/ogg">#}
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
+
+                    </a>
+                </div>
+            {% endfor %}
 
         </div>
     </div>
