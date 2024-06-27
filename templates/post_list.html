@@ -8,7 +8,8 @@
             {% for post in posts %}
                 <div class="card mb-4">
                     <div class="card-header">
-                        <a class=" d-flex text-dark" style="text-decoration: none" href="{% url 'posts:profile_page' post.author.username %}">
+                        <a class=" d-flex text-dark" style="text-decoration: none"
+                           href="{% url 'posts:profile_page' post.author.username %}">
                             <img src="{{ post.author.profile_picture.url }}"
                                  style="width: 40px; height: 40px; border-radius: 50%" alt="rasm yo'q">
                             <h5 class="card-title m-1 mt-1">{{ post.author.username }}</h5>
@@ -24,6 +25,16 @@
                                 Your browser does not support the video tag.
                             </video>
                         {% endif %}
+                    </div>
+                    <div class="px-3">
+                        <a href="{% url 'posts:like_post' post.id %}" >
+                            {% if request.user in post.likes.all %}
+                                <i class="fa fa-heart fa-2x"></i>
+                            {% else %}
+                                <i class="fa fa-heart-o fa-2x"></i>
+                            {% endif %}
+                        </a>
+                        <p><span class="likes-count">{{ post.likes.count }}</span> likes</p>
                     </div>
                     <div class="card-footer">
                         <p class="card-text">{{ post.content }}</p>

@@ -45,13 +45,21 @@ def send_message_view(request, username):
         sender = request.user
         Message.objects.create(content=message, sender=sender, receiver=receiver)
 
-    sender_messages = Message.objects.all().filter(sender=request.user)
-    receiver_messages = Message.objects.all().filter(receiver=request.user)
+    sender_messages = Message.objects.filter(sender=request.user)
+    receiver_messages = Message.objects.filter(receiver=request.user)
 
     combined_messages = sender_messages | receiver_messages
     combined_messages = combined_messages.order_by('timestamp')
 
-    return render(request, 'messages.html', {'combined_messages': combined_messages})
+    messages = Message.objects.filter(sender=request.user).order_by('-timestamp')
+    friends = list()
+    for message in messages:
+        friends.append(message.receiver.username)
+    friends = set(friends)
+
+    return render(request, 'messages.html',
+                  {'combined_messages': combined_messages, 'receiver': receiver, 'messages': messages,
+                   'friends': friends})
 
 
 @login_required
@@ -94,7 +102,7 @@ def edit_profile(request, username):
         form = EditProfileForm(request.POST, instance=request.user, files=request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('posts:my-posts')
+            return redirect('posts:profile_page', username=username)
     else:
         form = EditProfileForm(instance=request.user)
     return render(request, 'edit_profile.html', {'form': form})

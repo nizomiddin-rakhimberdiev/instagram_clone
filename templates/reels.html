@@ -7,21 +7,21 @@
 
             <div class="col-md-4">
                 {% if posts %}
-                {% for post in posts %}
-                    <div class="card">
-                        <div class="card-image">
-                            {% if post.video %}
-                            <video width="320" style="height: 100vh" controls>
-                                <source src="{{ post.video.url }}" type="video/mp4">
-{#                                <source src="{{ post.video.url }}" type="video/ogg">#}
-                                Your browser does not support the video tag.
-                            </video>
-                            {% endif %}
+                    {% for post in posts %}
+                        <div class="card">
+                            <div class="card-image">
+                                {% if post.video %}
+                                    <video width="320" style="height: 100vh" controls>
+                                        <source src="{{ post.video.url }}" type="video/mp4">
+                                        {#                                <source src="{{ post.video.url }}" type="video/ogg">#}
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
                 {% else %}
-                reels yo'q
+                    reels yo'q
                 {% endif %}
 
             </div>

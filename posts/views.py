@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 import random
 from posts.forms import PostForm
 from posts.models import Post, Comment
@@ -43,11 +44,25 @@ def add_comment(request, post_id):
     return render(request, 'add_comment.html', {'post': post, 'comments': comments})
 
 
+@login_required
+def like_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    # liked = bool()
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    # return JsonResponse({'liked': liked, 'likes_count': post.likes.count()})
+    return redirect('posts:post_list')
+
+
 def profile_page(request, username):
-    user = CustomUser.objects.get(username=username)
-    posts = Post.objects.all().filter(author=user)
+    # user = CustomUser.objects.get(username=username)
+    posts = Post.objects.all().filter(author=request.user)
     len_posts = len(posts)
-    context = {'posts': posts, 'user': user, 'len_posts': len_posts}
+    context = {'posts': posts, 'len_posts': len_posts}
     return render(request, 'profile.html', context)
 
 

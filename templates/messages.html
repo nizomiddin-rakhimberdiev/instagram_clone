@@ -2,30 +2,65 @@
 
 {% block content %}
 
-    <div class="col-md-6 m-auto py-5">
-        <div class="row">
-            <div class="col-md-12 border-1">
-                {% for message in combined_messages %}
-                    <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-                        <p>{{ message.content }}</p>
-                        <small>{{ message.timestamp }}</small>
-                    </div>
-                {% endfor %}
-                <hr>
+    <div class="col-md-12">
+        <div class="row d-flex justify-content-between">
+            <div class="col-md-6">
+                <ul class="list-group">
+                    {% for friend in friends %}
+{#                        {% if message.sender.username == request.user.username %}#}
+                            <li class="list-group-item">
+                                <a href="{% url 'users:send_message' friend %}">{{ friend }}</a>
+{#                                <p>{{ message.timestamp }}</p>#}
+                            </li>
+{#                        {% endif %}#}
+                    {% endfor %}
+
+                </ul>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
+            <div class="col-md-6 ms-auto py-5">
+                <div class="row  messages">
+                    <div class="col-md-12 border-1">
+                        {% for message in combined_messages %}
+                            {% if message.sender == request.user and message.receiver == receiver %}
+                                <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                                    <div class="d-flex justify-content-between">
+                                        <h4>{{ message.sender.username }}</h4>
+                                        <small>{{ message.timestamp }}</small>
+                                    </div>
+
+                                    <p>{{ message.content }}</p>
+
+                                </div>
+                            {% elif message.sender == receiver and message.receiver == request.user %}
+                                <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+
+                                    <div class="d-flex justify-content-between">
+                                        <h4>{{ message.sender.username }}</h4>
+                                        <small>{{ message.timestamp }}</small>
+                                    </div>
+                                    <p>{{ message.content }}</p>
+
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
                             <textarea name="content" class="form-control" rows="2"
                                       placeholder="Write your message..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Send</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-secondary">Send</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+
 
 {% endblock %}
